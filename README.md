@@ -1,6 +1,6 @@
 ---
 
-[![Sage](https://raw.githubusercontent.com/nvzqz/Sage/assets/Banner.png)](https://github.com/nvzqz/Sage)
+[![Sage](https://github.com/SuperGeroy/Sage/blob/assets/Banner.png)](https://github.com/SuperGeroy/Sage)
 
 <p align="center">
 <a href="https://developer.apple.com/swift/"><img alt="Swift 4.2" src="https://img.shields.io/badge/Swift-4.2-orange.svg"></a>
