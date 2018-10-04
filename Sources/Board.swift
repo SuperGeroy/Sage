@@ -73,7 +73,7 @@ public struct Board: Hashable, CustomStringConvertible {
 
         /// A textual representation of `self`.
         public var description: String {
-            return "Space(\(name), \(piece._altDescription)"
+            return "Space(\(name), \(piece._altDescription))"
         }
 
         /// The hash value.
@@ -220,7 +220,7 @@ public struct Board: Hashable, CustomStringConvertible {
 
     /// A bitboard for the occupied spaces of `self`.
     public var occupiedSpaces: Bitboard {
-            return _bitboards.reduce(0, |)
+        return _bitboards.reduce(0, |)
     }
 
     /// A bitboard for the empty spaces of `self`.
@@ -294,7 +294,7 @@ public struct Board: Hashable, CustomStringConvertible {
     public init?(fen: String) {
         func pieces(for string: String) -> [Piece?]? {
             var pieces: [Piece?] = []
-            for char in string.characters {
+            for char in string {
                 guard pieces.count < 8 else {
                     return nil
                 }
@@ -309,10 +309,10 @@ public struct Board: Hashable, CustomStringConvertible {
             }
             return pieces
         }
-        guard !fen.characters.contains(" ") else {
+        guard !fen.contains(" ") else {
             return nil
         }
-        let parts = fen.characters.split(separator: "/").map(String.init)
+        let parts = fen.split(separator: "/").map(String.init)
         let ranks = Rank.all.reversed()
         guard parts.count == 8 else {
             return nil
