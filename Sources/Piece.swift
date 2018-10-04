@@ -42,22 +42,22 @@ public struct Piece: Hashable, CustomStringConvertible {
         /// King piece kind.
         case king
 
-        /// Pawn regardless of Swift veersion.
+        /// Pawn
         internal static let _pawn = Kind.pawn
 
-        /// Knight regardless of Swift veersion.
+        /// Knight
         internal static let _knight = Kind.knight
 
-        /// Bishop regardless of Swift veersion.
+        /// Bishop
         internal static let _bishop = Kind.bishop
 
-        /// Rook regardless of Swift veersion.
+        /// Rook
         internal static let _rook = Kind.rook
 
-        /// Queen regardless of Swift veersion.
+        /// Queen
         internal static let _queen = Kind.queen
 
-        /// King regardless of Swift veersion.
+        /// King
         internal static let _king = Kind.king
 
         /// An array of all piece kinds.
