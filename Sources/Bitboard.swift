@@ -3,6 +3,7 @@
 //  Sage
 //
 //  Copyright 2016-2017 Nikolai Vazquez
+//  Modified by SuperGeroy
 //
 //  Licensed under the Apache License, Version 2.0 (the "License");
 //  you may not use this file except in compliance with the License.
@@ -79,8 +80,6 @@ public struct Bitboard: RawRepresentable, Hashable, CustomStringConvertible {
     /// A bitboard shift direction.
     public enum ShiftDirection {
 
-        #if swift(>=3)
-
         /// North direction.
         case north
 
@@ -129,61 +128,7 @@ public struct Bitboard: RawRepresentable, Hashable, CustomStringConvertible {
         /// Southwest regardless of Swift version.
         internal static let _southwest = ShiftDirection.southwest
 
-        #else
-
-        /// North direction.
-        case North
-
-        /// South direction.
-        case South
-
-        /// East direction.
-        case East
-
-        /// West direction.
-        case West
-
-        /// Northeast direction.
-        case Northeast
-
-        /// Southeast direction.
-        case Southeast
-
-        /// Northwest direction.
-        case Northwest
-
-        /// Southwest direction.
-        case Southwest
-
-        /// North regardless of Swift version.
-        internal static let _north = ShiftDirection.North
-
-        /// South regardless of Swift version.
-        internal static let _south = ShiftDirection.South
-
-        /// East regardless of Swift version.
-        internal static let _east = ShiftDirection.East
-
-        /// West regardless of Swift version.
-        internal static let _west = ShiftDirection.West
-
-        /// Northeast regardless of Swift version.
-        internal static let _northeast = ShiftDirection.Northeast
-
-        /// Southeast regardless of Swift version.
-        internal static let _southeast = ShiftDirection.Southeast
-
-        /// Northwest regardless of Swift version.
-        internal static let _northwest = ShiftDirection.Northwest
-
-        /// Southwest regardless of Swift version.
-        internal static let _southwest = ShiftDirection.Southwest
-
-        #endif
-
     }
-
-    #if swift(>=3)
 
     /// An iterator for the squares of a `Bitboard`.
     public struct Iterator: IteratorProtocol {
@@ -197,22 +142,6 @@ public struct Bitboard: RawRepresentable, Hashable, CustomStringConvertible {
         }
 
     }
-
-    #else
-
-    /// A generator for the squares of a `Bitboard`.
-    public struct Generator: GeneratorType {
-
-        private var _bitboard: Bitboard
-
-        /// Advance to the next element and return it, or `nil` if no next element exists.
-        public mutating func next() -> Square? {
-            return _bitboard.popLSBSquare()
-        }
-
-    }
-
-    #endif
 
     /// The empty bitset.
     public static var allZeros: Bitboard {
@@ -230,11 +159,7 @@ public struct Bitboard: RawRepresentable, Hashable, CustomStringConvertible {
     /// A textual representation of `self`.
     public var description: String {
         let num = String(rawValue, radix: 16)
-        #if swift(>=3)
-            let str = repeatElement("0", count: 16 - num.characters.count).joined(separator: "")
-        #else
-            let str = Repeat(count: 16 - num.characters.count, repeatedValue: "0").joinWithSeparator("")
-        #endif
+        let str = repeatElement("0", count: 16 - num.characters.count).joined(separator: "")
         return "Bitboard(0x\(str + num))"
     }
 
@@ -263,18 +188,10 @@ public struct Bitboard: RawRepresentable, Hashable, CustomStringConvertible {
     public var ascii: String {
         let edge = "  +-----------------+\n"
         var result = edge
-        #if swift(>=3)
-            let ranks = Rank.all.reversed()
-        #else
-            let ranks = Rank.all.reverse()
-        #endif
+        let ranks = Rank.all.reversed()
         for rank in ranks {
             let strings = File.all.map({ file in self[(file, rank)] ? "1" : "." })
-            #if swift(>=3)
-                let str = strings.joined(separator: " ")
-            #else
-                let str = strings.joinWithSeparator(" ")
-            #endif
+            let str = strings.joined(separator: " ")
             result += "\(rank) | \(str) |\n"
         }
         result += "\(edge)    a b c d e f g h  "
@@ -356,29 +273,16 @@ public struct Bitboard: RawRepresentable, Hashable, CustomStringConvertible {
     /// Create a starting bitboard for `piece`.
     public init(startFor piece: Piece) {
         let value: Bitboard
-        #if swift(>=3)
-            switch piece.kind {
+        switch piece.kind {
             case .pawn:   value = 0xFF00
             case .knight: value = 0x0042
             case .bishop: value = 0x0024
             case .rook:   value = 0x0081
             case .queen:  value = 0x0008
             case .king:   value = 0x0010
-            }
-        #else
-            switch piece.kind {
-            case .Pawn:   value = 0xFF00
-            case .Knight: value = 0x0042
-            case .Bishop: value = 0x0024
-            case .Rook:   value = 0x0081
-            case .Queen:  value = 0x0008
-            case .King:   value = 0x0010
-            }
-        #endif
+        }
         self = piece.color.isWhite ? value : value << (piece.kind.isPawn ? 40 : 56)
     }
-
-    #if swift(>=3)
 
     /// Create a bitboard from `squares`.
     public init<S: Sequence>(squares: S) where S.Iterator.Element == Square {
@@ -390,20 +294,6 @@ public struct Bitboard: RawRepresentable, Hashable, CustomStringConvertible {
         self.init(squares: locations.map(Square.init(location:)))
     }
 
-    #else
-
-    /// Create a bitboard from `squares`.
-    public init<S: SequenceType where S.Generator.Element == Square>(squares: S) {
-        rawValue = squares.reduce(0) { $0 | (1 << UInt64($1.rawValue)) }
-    }
-
-    /// Create a bitboard from `locations`.
-    public init<S: SequenceType where S.Generator.Element == Location>(locations: S) {
-        self.init(squares: locations.map(Square.init(location:)))
-    }
-
-    #endif
-
     /// Create a bitboard from the start and end of `move`.
     public init(move: Move) {
         self.init(squares: [move.start, move.end])
@@ -411,8 +301,7 @@ public struct Bitboard: RawRepresentable, Hashable, CustomStringConvertible {
 
     /// Create a bitboard mask for `file`.
     public init(file: File) {
-        #if swift(>=3)
-            switch file {
+        switch file {
             case .a: rawValue = 0x0101010101010101
             case .b: rawValue = 0x0202020202020202
             case .c: rawValue = 0x0404040404040404
@@ -421,19 +310,7 @@ public struct Bitboard: RawRepresentable, Hashable, CustomStringConvertible {
             case .f: rawValue = 0x2020202020202020
             case .g: rawValue = 0x4040404040404040
             case .h: rawValue = 0x8080808080808080
-            }
-        #else
-            switch file {
-            case .A: rawValue = 0x0101010101010101
-            case .B: rawValue = 0x0202020202020202
-            case .C: rawValue = 0x0404040404040404
-            case .D: rawValue = 0x0808080808080808
-            case .E: rawValue = 0x1010101010101010
-            case .F: rawValue = 0x2020202020202020
-            case .G: rawValue = 0x4040404040404040
-            case .H: rawValue = 0x8080808080808080
-            }
-        #endif
+        }
     }
 
     /// Create a bitboard mask for `rank`.
@@ -545,8 +422,7 @@ public struct Bitboard: RawRepresentable, Hashable, CustomStringConvertible {
 
     /// Returns the attacks available to `piece` in `self`.
     internal func _attacks(for piece: Piece, stoppers: Bitboard = 0) -> Bitboard {
-        #if swift(>=3)
-            switch piece.kind {
+        switch piece.kind {
             case .pawn:
                 return _pawnAttacks(for: piece.color)
             case .knight:
@@ -559,23 +435,7 @@ public struct Bitboard: RawRepresentable, Hashable, CustomStringConvertible {
                 return _queenAttacks(stoppers: stoppers)
             case .king:
                 return _kingAttacks()
-            }
-        #else
-            switch piece.kind {
-            case .Pawn:
-                return _pawnAttacks(for: piece.color)
-            case .Knight:
-                return _knightAttacks()
-            case .Bishop:
-                return _bishopAttacks(stoppers: stoppers)
-            case .Rook:
-                return _rookAttacks(stoppers: stoppers)
-            case .Queen:
-                return _queenAttacks(stoppers: stoppers)
-            case .King:
-                return _kingAttacks()
-            }
-        #endif
+        }
     }
 
     /// Returns `true` if `self` intersects `other`.
@@ -616,40 +476,19 @@ public struct Bitboard: RawRepresentable, Hashable, CustomStringConvertible {
         return bitboard
     }
 
-    #if swift(>=3)
-
     /// Returns the bits of `self` shifted once toward `direction`.
     public func shifted(toward direction: ShiftDirection) -> Bitboard {
         switch direction {
-        case .north:     return  self << 8
-        case .south:     return  self >> 8
-        case .east:      return (self << 1) & _notFileA
-        case .northeast: return (self << 9) & _notFileA
-        case .southeast: return (self >> 7) & _notFileA
-        case .west:      return (self >> 1) & _notFileH
-        case .southwest: return (self >> 9) & _notFileH
-        case .northwest: return (self << 7) & _notFileH
+            case .north:     return  self << 8
+            case .south:     return  self >> 8
+            case .east:      return (self << 1) & _notFileA
+            case .northeast: return (self << 9) & _notFileA
+            case .southeast: return (self >> 7) & _notFileA
+            case .west:      return (self >> 1) & _notFileH
+            case .southwest: return (self >> 9) & _notFileH
+            case .northwest: return (self << 7) & _notFileH
         }
     }
-
-    #else
-
-    /// Returns the bits of `self` shifted once toward `direction`.
-    @warn_unused_result(mutable_variant="shift")
-    public func shifted(toward direction: ShiftDirection) -> Bitboard {
-        switch direction {
-        case .North:     return  self << 8
-        case .South:     return  self >> 8
-        case .East:      return (self << 1) & _notFileA
-        case .Northeast: return (self << 9) & _notFileA
-        case .Southeast: return (self >> 7) & _notFileA
-        case .West:      return (self >> 1) & _notFileH
-        case .Southwest: return (self >> 9) & _notFileH
-        case .Northwest: return (self << 7) & _notFileH
-        }
-    }
-
-    #endif
 
     /// Flips `self` horizontally.
     public mutating func flipHorizontally() {
@@ -720,8 +559,6 @@ public struct Bitboard: RawRepresentable, Hashable, CustomStringConvertible {
 
 }
 
-#if swift(>=3)
-
 extension Bitboard: Sequence, BitwiseOperations {
 
     /// A value less than or equal to the number of elements in
@@ -747,42 +584,7 @@ extension Bitboard: Sequence, BitwiseOperations {
 
 }
 
-#else
-
-extension Bitboard: SequenceType, BitwiseOperationsType {
-
-    /// Returns a value less than or equal to the number of elements in
-    /// `self`, **nondestructively**.
-    ///
-    /// - complexity: O(1).
-    public func underestimateCount() -> Int {
-        return count
-    }
-
-    /// Returns `true` iff `element` is in `self`.
-    ///
-    /// - complexity: O(1).
-    @warn_unused_result
-    public func contains(element: Square) -> Bool {
-        return self[element]
-    }
-
-    /// Returns a generator over the squares of the board.
-    ///
-    /// - complexity: O(1).
-    public func generate() -> Generator {
-        return Generator(_bitboard: self)
-    }
-
-}
-
-#endif
-
-#if swift(>=3)
-    extension Bitboard: ExpressibleByIntegerLiteral { }
-#else
-    extension Bitboard: IntegerLiteralConvertible { }
-#endif
+extension Bitboard: ExpressibleByIntegerLiteral { }
 
 extension Bitboard {
     /// Create an instance initialized to `value`.
@@ -829,8 +631,6 @@ public func << (lhs: Bitboard, rhs: Bitboard) -> Bitboard {
     return Bitboard(rawValue: lhs.rawValue << rhs.rawValue)
 }
 
-#if swift(>=3)
-
 /// Shifts the bits of `lhs` right by `rhs`.
 public func >>= (lhs: inout Bitboard, rhs: Bitboard) {
     lhs.rawValue >>= rhs.rawValue
@@ -840,17 +640,3 @@ public func >>= (lhs: inout Bitboard, rhs: Bitboard) {
 public func <<= (lhs: inout Bitboard, rhs: Bitboard) {
     lhs.rawValue <<= rhs.rawValue
 }
-
-#else
-
-/// Shifts the bits of `lhs` right by `rhs`.
-public func >>= (inout lhs: Bitboard, rhs: Bitboard) {
-    lhs.rawValue >>= rhs.rawValue
-}
-
-/// Shifts the bits of `lhs` left by `rhs`.
-public func <<= (inout lhs: Bitboard, rhs: Bitboard) {
-    lhs.rawValue <<= rhs.rawValue
-}
-
-#endif

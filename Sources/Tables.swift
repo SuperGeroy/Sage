@@ -3,6 +3,7 @@
 //  Sage
 //
 //  Copyright 2016-2017 Nikolai Vazquez
+//  Modified by SuperGeroy
 //
 //  Licensed under the Apache License, Version 2.0 (the "License");
 //  you may not use this file except in compliance with the License.
@@ -82,11 +83,7 @@ internal func _triangleIndex(_ start: Square, _ end: Square) -> Int {
 
 /// A lookup table of squares between two squares.
 internal let _betweenTable: [Bitboard] = {
-    #if swift(>=3)
-        var table = [Bitboard](repeating: 0, count: 2080)
-    #else
-        var table = [Bitboard](count: 2080, repeatedValue: 0)
-    #endif
+    var table = [Bitboard](repeating: 0, count: 2080)
     for start in Square.all {
         for end in Square.all {
             let index = _triangleIndex(start, end)
@@ -98,11 +95,7 @@ internal let _betweenTable: [Bitboard] = {
 
 /// A lookup table of lines for two squares.
 internal let _lineTable: [Bitboard] = {
-    #if swift(>=3)
-        var table = [Bitboard](repeating: 0, count: 2080)
-    #else
-        var table = [Bitboard](count: 2080, repeatedValue: 0)
-    #endif
+    var table = [Bitboard](repeating: 0, count: 2080)
     for start in Square.all {
         for end in Square.all {
             let startBB = Bitboard(square: start)

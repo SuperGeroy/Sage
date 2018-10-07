@@ -3,6 +3,7 @@
 //  Sage
 //
 //  Copyright 2016-2017 Nikolai Vazquez
+//  Modified by SuperGeroy
 //
 //  Licensed under the Apache License, Version 2.0 (the "License");
 //  you may not use this file except in compliance with the License.
@@ -20,8 +21,6 @@
 /// A chess variant that defines how a `Board` is populated or how a `Game` is played.
 public enum Variant {
 
-    #if swift(>=3)
-
     /// Standard chess.
     case standard
 
@@ -33,22 +32,6 @@ public enum Variant {
 
     /// UpsideDown regardless of Swift version.
     internal static let _upsideDown = Variant.upsideDown
-
-    #else
-
-    /// Standard chess.
-    case Standard
-
-    /// Upside down chess where the piece colors swap starting squares.
-    case UpsideDown
-
-    /// Standard regardless of Swift version.
-    internal static let _standard = Variant.Standard
-
-    /// UpsideDown regardless of Swift version.
-    internal static let _upsideDown = Variant.UpsideDown
-
-    #endif
 
     /// `self` is standard variant.
     public var isStandard: Bool {

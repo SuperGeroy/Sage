@@ -3,6 +3,7 @@
 //  Sage
 //
 //  Copyright 2016-2017 Nikolai Vazquez
+//  Modified by SuperGeroy
 //
 //  Licensed under the Apache License, Version 2.0 (the "License");
 //  you may not use this file except in compliance with the License.
@@ -25,27 +26,13 @@ public enum Rank: Int, Comparable, CustomStringConvertible {
     /// A direction in rank.
     public enum Direction {
 
-        #if swift(>=3)
-
         /// Up direction.
         case up
 
         /// Down direction.
         case down
 
-        #else
-
-        /// Up direction.
-        case Up
-
-        /// Down direction.
-        case Down
-
-        #endif
-
     }
-
-    #if swift(>=3)
 
     /// Rank 1.
     case one = 1
@@ -70,34 +57,6 @@ public enum Rank: Int, Comparable, CustomStringConvertible {
 
     /// Rank 8.
     case eight = 8
-
-    #else
-
-    /// Rank 1.
-    case One = 1
-
-    /// Rank 2.
-    case Two = 2
-
-    /// Rank 3.
-    case Three = 3
-
-    /// Rank 4.
-    case Four = 4
-
-    /// Rank 5.
-    case Five = 5
-
-    /// Rank 6.
-    case Six = 6
-
-    /// Rank 7.
-    case Seven = 7
-
-    /// Rank 8.
-    case Eight = 8
-
-    #endif
 
 }
 
@@ -168,11 +127,7 @@ extension Rank {
 
 }
 
-#if swift(>=3)
 extension Rank: ExpressibleByIntegerLiteral { }
-#else
-extension Rank: IntegerLiteralConvertible { }
-#endif
 
 extension Rank {
 

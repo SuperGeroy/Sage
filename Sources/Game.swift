@@ -3,6 +3,7 @@
 //  Sage
 //
 //  Copyright 2016-2017 Nikolai Vazquez
+//  Modified by SuperGeroy
 //
 //  Licensed under the Apache License, Version 2.0 (the "License");
 //  you may not use this file except in compliance with the License.
@@ -23,8 +24,6 @@ public final class Game {
     /// A chess game outcome.
     public enum Outcome: Hashable, CustomStringConvertible {
 
-        #if swift(>=3)
-
         /// A win for a `Color`.
         case win(Color)
 
@@ -34,26 +33,9 @@ public final class Game {
         /// Draw regardless of Swift version.
         internal static let _draw = Outcome.draw
 
-        #else
-
-        /// A win for a `Color`.
-        case Win(Color)
-
-        /// A draw.
-        case Draw
-
-        /// Draw regardless of Swift version.
-        internal static let _draw = Outcome.Draw
-
-        #endif
-
         /// Win regardless of Swift version.
         internal static func _win(_ color: Color) -> Outcome {
-            #if swift(>=3)
-                return .win(color)
-            #else
-                return .Win(color)
-            #endif
+            return .win(color)
         }
 
         /// The hash value.
@@ -72,21 +54,13 @@ public final class Game {
 
         /// The color for the winning player.
         public var winColor: Color? {
-            #if swift(>=3)
-                guard case let .win(color) = self else { return nil }
-            #else
-                guard case let .Win(color) = self else { return nil }
-            #endif
+            guard case let .win(color) = self else { return nil }
             return color
         }
 
         /// `self` is a win.
         public var isWin: Bool {
-            #if swift(>=3)
-                if case .win = self { return true } else { return false }
-            #else
-                if case .Win = self { return true } else { return false }
-            #endif
+            if case .win = self { return true } else { return false }
         }
 
         /// `self` is a draw.
@@ -96,11 +70,7 @@ public final class Game {
 
         /// Create an outcome from `string`. Ignores whitespace.
         public init?(_ string: String) {
-            #if swift(>=3)
-                let stripped = string.characters.split(separator: " ").map(String.init).joined(separator: "")
-            #else
-                let stripped = string.characters.split(" ").map(String.init).joinWithSeparator("")
-            #endif
+            let stripped = string.characters.split(separator: " ").map(String.init).joined(separator: "")
             switch stripped {
             case "1-0":
                 self = ._win(._white)
@@ -166,33 +136,18 @@ public final class Game {
         /// - seealso: [FEN (Wikipedia)](https://en.wikipedia.org/wiki/Forsyth%E2%80%93Edwards_Notation),
         ///            [FEN (Chess Programming Wiki)](https://chessprogramming.wikispaces.com/Forsyth-Edwards+Notation)
         public init?(fen: String) {
-            #if swift(>=3)
-                let parts = fen.characters.split(separator: " ").map(String.init)
-                guard
-                    parts.count == 6,
-                    let board = Board(fen: parts[0]),
-                    parts[1].characters.count == 1,
-                    let playerTurn = parts[1].characters.first.flatMap(Color.init),
-                    let rights = CastlingRights(string: parts[2]),
-                    let halfmoves = UInt(parts[4]),
-                    let fullmoves = UInt(parts[5]),
-                    fullmoves > 0 else {
-                        return nil
-                }
-            #else
-                let parts = fen.characters.split(" ").map(String.init)
-                guard
-                    parts.count == 6,
-                    let board = Board(fen: parts[0])
-                    where parts[1].characters.count == 1,
-                    let playerTurn = parts[1].characters.first.flatMap(Color.init),
-                    let rights = CastlingRights(string: parts[2]),
-                    let halfmoves = UInt(parts[4]),
-                    let fullmoves = UInt(parts[5])
-                    where fullmoves > 0 else {
-                        return nil
-                }
-            #endif
+            let parts = fen.characters.split(separator: " ").map(String.init)
+            guard
+                parts.count == 6,
+                let board = Board(fen: parts[0]),
+                parts[1].characters.count == 1,
+                let playerTurn = parts[1].characters.first.flatMap(Color.init),
+                let rights = CastlingRights(string: parts[2]),
+                let halfmoves = UInt(parts[4]),
+                let fullmoves = UInt(parts[5]),
+                fullmoves > 0 else {
+                    return nil
+            }
             var target: Square? = nil
             let targetStr = parts[3]
             let targetChars = targetStr.characters
@@ -217,64 +172,36 @@ public final class Game {
         internal func _validationError() -> PositionError? {
             for color in Color.all {
                 guard board.count(of: Piece(king: color)) == 1 else {
-                    #if swift(>=3)
-                        return .wrongKingCount(color)
-                    #else
-                        return .WrongKingCount(color)
-                    #endif
+                    return .wrongKingCount(color)
                 }
             }
             for right in castlingRights {
                 let color = right.color
                 let king = Piece(king: color)
                 guard board.bitboard(for: king) == Bitboard(startFor: king) else {
-                    #if swift(>=3)
-                        return .missingKing(right)
-                    #else
-                        return .MissingKing(right)
-                    #endif
+                    return .missingKing(right)
                 }
                 let rook = Piece(rook: color)
                 let square = Square(file: right.side.isKingside ? ._h : ._a,
                                     rank: Rank(startFor: color))
                 guard board.bitboard(for: rook)[square] else {
-                    #if swift(>=3)
-                        return .missingRook(right)
-                    #else
-                        return .MissingRook(right)
-                    #endif
+                    return .missingRook(right)
                 }
             }
             if let target = enPassantTarget {
                 guard target.rank == (playerTurn.isWhite ? 6 : 3) else {
-                    #if swift(>=3)
-                        return .wrongEnPassantTargetRank(target.rank)
-                    #else
-                        return .WrongEnPassantTargetRank(target.rank)
-                    #endif
+                    return .wrongEnPassantTargetRank(target.rank)
                 }
                 if let piece = board[target] {
-                    #if swift(>=3)
-                        return .nonEmptyEnPassantTarget(target, piece)
-                    #else
-                        return .NonEmptyEnPassantTarget(target, piece)
-                    #endif
+                    return .nonEmptyEnPassantTarget(target, piece)
                 }
                 let pawnSquare = Square(file: target.file, rank: playerTurn.isWhite ? 5 : 4)
                 guard board[pawnSquare] == Piece(pawn: playerTurn.inverse()) else {
-                    #if swift(>=3)
-                        return .missingEnPassantPawn(pawnSquare)
-                    #else
-                        return .MissingEnPassantPawn(pawnSquare)
-                    #endif
+                    return .missingEnPassantPawn(pawnSquare)
                 }
                 let startSquare = Square(file: target.file, rank: playerTurn.isWhite ? 7 : 2)
                 if let piece = board[startSquare] {
-                    #if swift(>=3)
-                        return .nonEmptyEnPassantSquare(startSquare, piece)
-                    #else
-                        return .NonEmptyEnPassantSquare(startSquare, piece)
-                    #endif
+                    return .nonEmptyEnPassantSquare(startSquare, piece)
                 }
             }
             return nil
@@ -285,11 +212,7 @@ public final class Game {
         /// - seealso: [FEN (Wikipedia)](https://en.wikipedia.org/wiki/Forsyth%E2%80%93Edwards_Notation),
         ///            [FEN (Chess Programming Wiki)](https://chessprogramming.wikispaces.com/Forsyth-Edwards+Notation)
         public func fen() -> String {
-            #if swift(>=3)
-                let transform = { "\($0 as Square)".lowercased() }
-            #else
-                let transform = { "\($0 as Square)".lowercaseString }
-            #endif
+            let transform = { "\($0 as Square)".lowercased() }
             return board.fen()
                 + " \(playerTurn.isWhite ? "w" : "b") \(castlingRights) "
                 + (enPassantTarget.map(transform) ?? "-")
@@ -297,8 +220,6 @@ public final class Game {
         }
 
     }
-
-    #if swift(>=3)
 
     /// An error in position validation.
     public enum PositionError: Error {
@@ -353,64 +274,6 @@ public final class Game {
         }
 
     }
-
-    #else
-
-    /// An error in position validation.
-    public enum PositionError: ErrorType {
-
-        /// Found number other than 1 for king count.
-        case WrongKingCount(Color)
-
-        /// King missing for castling right.
-        case MissingKing(CastlingRights.Right)
-
-        /// Rook missing for castling right.
-        case MissingRook(CastlingRights.Right)
-
-        /// Wrong rank for en passant target.
-        case WrongEnPassantTargetRank(Rank)
-
-        /// Non empty en passant target square.
-        case NonEmptyEnPassantTarget(Square, Piece)
-
-        /// Pawn missing for previous en passant.
-        case MissingEnPassantPawn(Square)
-
-        /// Piece found at start of en passant move.
-        case NonEmptyEnPassantSquare(Square, Piece)
-
-    }
-
-    /// An error in move execution.
-    ///
-    /// Thrown by the `execute(move:promotion:)` method for a `Game` instance.
-    public enum ExecutionError: ErrorType {
-
-        /// Missing piece at a square.
-        case MissingPiece(Square)
-
-        /// Attempted illegal move.
-        case IllegalMove(Move, Color, Board)
-
-        /// Could not promote with a piece kind.
-        case InvalidPromotion(Piece.Kind)
-
-        /// The error message.
-        public var message: String {
-            switch self {
-            case let .MissingPiece(square):
-                return "Missing piece: \(square)"
-            case let .IllegalMove(move, color, board):
-                return "Illegal move: \(move) for \(color) on \(board)"
-            case let .InvalidPromotion(pieceKind):
-                return "Invalid promoton: \(pieceKind)"
-            }
-        }
-
-    }
-
-    #endif
 
     /// A player turn.
     public typealias PlayerTurn = Color
@@ -682,11 +545,7 @@ public final class Game {
     /// Returns the available moves for the current player.
     private func _availableMoves(considerHalfmoves flag: Bool) -> [Move] {
         let moves = Square.all.map({ _movesForPiece(at: $0, considerHalfmoves: flag) })
-        #if swift(>=3)
-            return Array(moves.joined())
-        #else
-            return Array(moves.flatten())
-        #endif
+        return Array(moves.joined())
     }
 
     /// Returns the available moves for the current player.
@@ -713,8 +572,6 @@ public final class Game {
     public func movesForPiece(at location: Location) -> [Move] {
         return movesForPiece(at: Square(location: location))
     }
-
-    #if swift(>=3)
 
     /// Returns `true` if the move is legal.
     public func isLegal(move: Move) -> Bool {
@@ -813,107 +670,6 @@ public final class Game {
         _undoHistory = []
     }
 
-    #else
-
-    /// Returns `true` if the move is legal.
-    public func isLegal(move move: Move) -> Bool {
-        let moves = movesBitboardForPiece(at: move.start)
-        return Bitboard(square: move.end).intersects(moves)
-    }
-
-    @inline(__always)
-    private func _execute(uncheckedMove move: Move, @noescape promotion: () -> Piece.Kind) throws {
-        guard let piece = board[move.start] else {
-            throw ExecutionError.MissingPiece(move.start)
-        }
-        var endPiece = piece
-        var capture = board[move.end]
-        var captureSquare = move.end
-        let rights = castlingRights
-        if piece.kind.isPawn {
-            if move.end.rank == Rank(endFor: playerTurn) {
-                let promotion = promotion()
-                guard promotion.canPromote() else {
-                    throw ExecutionError.InvalidPromotion(promotion)
-                }
-                endPiece = Piece(kind: promotion, color: playerTurn)
-            } else if move.end == enPassantTarget {
-                capture = Piece(pawn: playerTurn.inverse())
-                captureSquare = Square(file: move.end.file, rank: move.start.rank)
-            }
-        } else if piece.kind.isRook {
-            switch move.start {
-            case .A1: castlingRights.remove(.WhiteQueenside)
-            case .H1: castlingRights.remove(.WhiteKingside)
-            case .A8: castlingRights.remove(.BlackQueenside)
-            case .H8: castlingRights.remove(.BlackKingside)
-            default:
-                break
-            }
-        } else if piece.kind.isKing {
-            for option in castlingRights where option.color == playerTurn {
-                castlingRights.remove(option)
-            }
-            if move.isCastle(for: playerTurn) {
-                let (old, new) = move._castleSquares()
-                let rook = Piece(rook: playerTurn)
-                board[rook][old] = false
-                board[rook][new] = true
-            }
-        }
-
-        if let capture = capture where capture.kind.isRook {
-            switch move.end {
-            case .A1 where playerTurn.isBlack: castlingRights.remove(.WhiteQueenside)
-            case .H1 where playerTurn.isBlack: castlingRights.remove(.WhiteKingside)
-            case .A8 where playerTurn.isWhite: castlingRights.remove(.BlackQueenside)
-            case .H8 where playerTurn.isWhite: castlingRights.remove(.BlackKingside)
-            default:
-                break
-            }
-        }
-
-        _moveHistory.append((move, piece, capture, enPassantTarget, attackersToKing, halfmoves, rights))
-        if let capture = capture {
-            board[capture][captureSquare] = false
-        }
-        if capture == nil && !piece.kind.isPawn {
-            halfmoves += 1
-        } else {
-            halfmoves = 0
-        }
-        board[piece][move.start] = false
-        board[endPiece][move.end] = true
-        playerTurn.invert()
-    }
-
-    /// Executes `move` without checking its legality, updating the state for `self`.
-    ///
-    /// - warning: Can cause unwanted effects. Should only be used with moves that are known to be legal.
-    ///
-    /// - parameter move: The move to be executed.
-    /// - parameter promotion: A closure returning a promotion piece kind if a pawn promotion occurs.
-    ///
-    /// - throws: `ExecutionError` if no piece exists at `move.start` or if `promotion` is invalid.
-    public func execute(uncheckedMove move: Move, @noescape promotion: () -> Piece.Kind) throws {
-        try _execute(uncheckedMove: move, promotion: promotion)
-        let piece = board[move.end]!
-        if piece.kind.isPawn && abs(move.rankChange) == 2 {
-            enPassantTarget = Square(file: move.start.file, rank: piece.color.isWhite ? 3 : 6)
-        } else {
-            enPassantTarget = nil
-        }
-        if kingIsChecked {
-            attackersToKing = 0
-        } else {
-            attackersToKing = board.attackersToKing(for: playerTurn)
-        }
-        fullmoves = 1 + (UInt(moveCount) / 2)
-        _undoHistory = []
-    }
-
-    #endif
-
     /// Executes `move` without checking its legality, updating the state for `self`.
     ///
     /// - warning: Can cause unwanted effects. Should only be used with moves that are known to be legal.
@@ -936,8 +692,6 @@ public final class Game {
     public func execute(uncheckedMove move: Move) throws {
         try execute(uncheckedMove: move, promotion: ._queen)
     }
-
-    #if swift(>=3)
 
     /// Executes `move`, updating the state for `self`.
     ///
@@ -970,42 +724,6 @@ public final class Game {
     public func execute(move: Move) throws {
         try execute(move: move, promotion: ._queen)
     }
-
-    #else
-
-    /// Executes `move`, updating the state for `self`.
-    ///
-    /// - parameter move: The move to be executed.
-    /// - parameter promotion: A closure returning a promotion piece kind if a pawn promotion occurs.
-    ///
-    /// - throws: `ExecutionError` if `move` is illegal or if `promotion` is invalid.
-    public func execute(move move: Move, @noescape promotion: () -> Piece.Kind) throws {
-        guard isLegal(move: move) else {
-            throw ExecutionError.IllegalMove(move, playerTurn, board)
-        }
-        try execute(uncheckedMove: move, promotion: promotion)
-    }
-
-    /// Executes `move`, updating the state for `self`.
-    ///
-    /// - parameter move: The move to be executed.
-    /// - parameter promotion: A piece kind for a pawn promotion.
-    ///
-    /// - throws: `ExecutionError` if `move` is illegal or if `promotion` is invalid.
-    public func execute(move move: Move, promotion: Piece.Kind) throws {
-        try execute(move: move, promotion: { promotion })
-    }
-
-    /// Executes `move`, updating the state for `self`.
-    ///
-    /// - parameter move: The move to be executed.
-    ///
-    /// - throws: `ExecutionError` if `move` is illegal.
-    public func execute(move move: Move) throws {
-        try execute(move: move, promotion: ._queen)
-    }
-
-    #endif
 
     /// Returns the last move on the move stack, if any.
     public func moveToUndo() -> Move? {
@@ -1062,8 +780,6 @@ public final class Game {
         return move
     }
 
-    #if swift(>=3)
-
     /// Undoes the previous move and returns it, if any.
     @discardableResult
     public func undoMove() -> Move? {
@@ -1075,19 +791,6 @@ public final class Game {
     public func redoMove() -> Move? {
         return _redoMove()
     }
-
-    #else
-
-    /// Undoes the previous move and returns it, if any.
-    public func undoMove() -> Move? {
-        return _undoMove()
-    }
-    /// Redoes the previous undone move and returns it, if any.
-    public func redoMove() -> Move? {
-        return _redoMove()
-    }
-
-    #endif
 
 }
 

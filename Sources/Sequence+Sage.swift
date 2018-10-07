@@ -3,6 +3,7 @@
 //  Sage
 //
 //  Copyright 2016-2017 Nikolai Vazquez
+//  Modified by SuperGeroy
 //
 //  Licensed under the Apache License, Version 2.0 (the "License");
 //  you may not use this file except in compliance with the License.
@@ -17,8 +18,6 @@
 //  limitations under the License.
 //
 
-#if swift(>=3)
-
 extension Sequence where Iterator.Element == Square {
 
     /// Returns moves from `square` to the squares in `self`.
@@ -32,21 +31,3 @@ extension Sequence where Iterator.Element == Square {
     }
 
 }
-
-#else
-
-extension SequenceType where Generator.Element == Square {
-
-    /// Returns moves from `square` to the squares in `self`.
-    public func moves(from square: Square) -> [Move] {
-        return self.map({ square >>> $0 })
-    }
-
-    /// Returns moves from the squares in `self` to `square`.
-    public func moves(to square: Square) -> [Move] {
-        return self.map({ $0 >>> square })
-    }
-
-}
-
-#endif

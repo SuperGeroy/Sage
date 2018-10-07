@@ -3,6 +3,7 @@
 //  Sage
 //
 //  Copyright 2016-2017 Nikolai Vazquez
+//  Modified by SuperGeroy
 //
 //  Licensed under the Apache License, Version 2.0 (the "License");
 //  you may not use this file except in compliance with the License.
@@ -23,8 +24,6 @@ public struct Player: Equatable, CustomStringConvertible {
     /// A player kind.
     public enum Kind: String, CustomStringConvertible {
 
-        #if swift(>=3)
-
         /// Human player kind.
         case human = "Human"
 
@@ -36,22 +35,6 @@ public struct Player: Equatable, CustomStringConvertible {
 
         /// Computer regardless of Swift version.
         internal static let _computer = Kind.computer
-
-        #else
-
-        /// Human player kind.
-        case Human
-
-        /// Computer player kind.
-        case Computer
-
-        /// Human regardless of Swift version.
-        internal static let _human = Kind.Human
-
-        /// Computer regardless of Swift version.
-        internal static let _computer = Kind.Computer
-
-        #endif
 
         /// Boolean indicating `self` is a human.
         public var isHuman: Bool {

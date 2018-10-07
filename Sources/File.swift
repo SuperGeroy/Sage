@@ -3,6 +3,7 @@
 //  Sage
 //
 //  Copyright 2016-2017 Nikolai Vazquez
+//  Modified by SuperGeroy
 //
 //  Licensed under the Apache License, Version 2.0 (the "License");
 //  you may not use this file except in compliance with the License.
@@ -25,27 +26,13 @@ public enum File: Int, Comparable, CustomStringConvertible {
     /// A direction in file.
     public enum Direction {
 
-        #if swift(>=3)
-
         /// Left direction.
         case left
 
         /// Right direction.
         case right
 
-        #else
-
-        /// Left direction.
-        case Left
-
-        /// Right direction.
-        case Right
-
-        #endif
-
     }
-
-    #if swift(>=3)
 
     /// File "A".
     case a = 1
@@ -95,73 +82,12 @@ public enum File: Int, Comparable, CustomStringConvertible {
     /// H regardless of Swift version.
     internal static let _h = File.h
 
-    #else
-
-    /// File "A".
-    case A = 1
-
-    /// File "B".
-    case B = 2
-
-    /// File "C".
-    case C = 3
-
-    /// File "D".
-    case D = 4
-
-    /// File "E".
-    case E = 5
-
-    /// File "F".
-    case F = 6
-
-    /// File "G".
-    case G = 7
-
-    /// File "H".
-    case H = 8
-
-    /// A regardless of Swift version.
-    internal static let _a = File.A
-
-    /// B regardless of Swift version.
-    internal static let _b = File.B
-
-    /// C regardless of Swift version.
-    internal static let _c = File.C
-
-    /// D regardless of Swift version.
-    internal static let _d = File.D
-
-    /// E regardless of Swift version.
-    internal static let _e = File.E
-
-    /// F regardless of Swift version.
-    internal static let _f = File.F
-
-    /// G regardless of Swift version.
-    internal static let _g = File.G
-
-    /// H regardless of Swift version.
-    internal static let _h = File.H
-
-    #endif
-
 }
 
 extension File {
 
-    #if swift(>=3)
-
     /// An array of all files.
     public static let all: [File] = [.a, .b, .c, .d, .e, .f, .g, .h]
-
-    #else
-
-    /// An array of all files.
-    public static let all: [File] = [.A, .B, .C, .D, .E, .F, .G, .H]
-
-    #endif
 
     /// The column index of `self`.
     public var index: Int {
@@ -175,8 +101,7 @@ extension File {
 
     /// The character value of `self`.
     public var character: Character {
-        #if swift(>=3)
-            switch self {
+        switch self {
             case .a: return "a"
             case .b: return "b"
             case .c: return "c"
@@ -185,25 +110,12 @@ extension File {
             case .f: return "f"
             case .g: return "g"
             case .h: return "h"
-            }
-        #else
-            switch self {
-            case .A: return "a"
-            case .B: return "b"
-            case .C: return "c"
-            case .D: return "d"
-            case .E: return "e"
-            case .F: return "f"
-            case .G: return "g"
-            case .H: return "h"
-            }
-        #endif
+        }
     }
 
     /// Create an instance from a character value.
     public init?(_ character: Character) {
-        #if swift(>=3)
-            switch character {
+        switch character {
             case "A", "a": self = .a
             case "B", "b": self = .b
             case "C", "c": self = .c
@@ -213,20 +125,7 @@ extension File {
             case "G", "g": self = .g
             case "H", "h": self = .h
             default: return nil
-            }
-        #else
-            switch character {
-            case "A", "a": self = .A
-            case "B", "b": self = .B
-            case "C", "c": self = .C
-            case "D", "d": self = .D
-            case "E", "e": self = .E
-            case "F", "f": self = .F
-            case "G", "g": self = .G
-            case "H", "h": self = .H
-            default: return nil
-            }
-        #endif
+        }
     }
 
     /// Create a `File` from a zero-based column index.
@@ -266,11 +165,7 @@ extension File {
 
 }
 
-#if swift(>=3)
 extension File: ExpressibleByExtendedGraphemeClusterLiteral { }
-#else
-extension File: ExtendedGraphemeClusterLiteralConvertible { }
-#endif
 
 extension File {
 

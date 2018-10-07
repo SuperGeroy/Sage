@@ -21,8 +21,6 @@
 /// A chess color.
 public enum Color: String, CustomStringConvertible {
 
-    #if swift(>=3)
-
     /// White chess color.
     case white
 
@@ -37,25 +35,6 @@ public enum Color: String, CustomStringConvertible {
 
     /// An array of all colors.
     public static let all: [Color] = [.white, .black]
-
-    #else
-
-    /// White chess color.
-    case White
-
-    /// Black chess color.
-    case Black
-
-    /// White color regardless of Swift version.
-    internal static let _white = Color.White
-
-    /// Black color regardless of Swift version.
-    internal static let _black = Color.Black
-
-    /// An array of all colors.
-    public static let all: [Color] = [.White, .Black]
-
-    #endif
 
     /// Whether the color is white or not.
     public var isWhite: Bool {
