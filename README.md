@@ -71,8 +71,8 @@ Development happens in the [`develop`](https://github.com/SuperGeroy/Sage/tree/d
     - watchOS 2.0+
     - tvOS 9.0+
     - Linux
-- Xcode 10.0
-- Swift 4.2
+- Xcode 10.1
+- Swift 3 (full 4.2 compatibility coming soon)
 
 ### Install Using Swift Package Manager
 The [Swift Package Manager](https://swift.org/package-manager/) is a
@@ -86,7 +86,7 @@ decentralized dependency manager for Swift.
     let package = Package(
         name: "MyAwesomeProject",
         dependencies: [
-            .Package(url: "https://github.com/nvzqz/Sage.git",
+            .Package(url: "https://github.com/SuperGeroy/Sage.git",
                      majorVersion: 2)
         ]
     )
@@ -114,7 +114,7 @@ to learn more.
     If you want to be on the bleeding edge, replace the last line with:
 
     ```ruby
-    pod 'Sage', :git => 'https://github.com/nvzqz/Sage.git'
+    pod 'Sage', :git => 'https://github.com/SuperGeroy/Sage.git'
     ```
 
 2. Run `pod install` and open the `.xcworkspace` file to launch Xcode.
@@ -323,9 +323,9 @@ You can then use the playground from within the project.
 
 #### Board Quick Look
 
-`Board` conforms to the `CustomPlaygroundQuickLookable` protocol.
+`Board` conforms to the `CustomPlaygroundDisplayConvertible` protocol.
 
-![Playground quick look](https://raw.githubusercontent.com/nvzqz/Sage/assets/BoardPlaygroundView.png)
+![Playground quick look](https://raw.githubusercontent.com/SuperGeroy/Sage/assets/BoardPlaygroundView.png)
 
 ## Donation
 
