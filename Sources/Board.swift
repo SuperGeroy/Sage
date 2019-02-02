@@ -26,7 +26,7 @@
 
 /// A chess board used to map `Square`s to `Piece`s.
 ///
-/// Pieces map to separate instances of `Bitboard` which can be retreived with `bitboard(for:)`.
+/// Pieces map to separate instances of `Bitboard` which can be retrieved with `bitboard(for:)`.
 public struct Board: Hashable, CustomStringConvertible {
 
     /// A chess board space.

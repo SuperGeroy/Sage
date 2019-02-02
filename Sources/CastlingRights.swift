@@ -213,7 +213,7 @@ public struct CastlingRights: CustomStringConvertible {
             _rights = Set()
         } else {
             var rights = Set<Right>()
-            for char in string.characters {
+            for char in string {
                 guard let right = Right(character: char) else {
                     return nil
                 }

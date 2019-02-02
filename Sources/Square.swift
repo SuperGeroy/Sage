@@ -285,14 +285,13 @@ extension Square {
 
     /// Create a square from `string`.
     public init?(_ string: String) {
-        let chars = string.characters
-        guard chars.count == 2 else {
+        guard string.count == 2 else {
             return nil
         }
-        guard let file = File(chars.first!) else {
+        guard let file = File(string.first!) else {
             return nil
         }
-        guard let rank = Int(String(chars.last!)).flatMap(Rank.init(_:)) else {
+        guard let rank = Int(String(string.last!)).flatMap(Rank.init(_:)) else {
             return nil
         }
         self.init(file: file, rank: rank)

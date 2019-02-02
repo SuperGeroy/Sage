@@ -159,7 +159,7 @@ public struct Bitboard: RawRepresentable, Hashable, CustomStringConvertible {
     /// A textual representation of `self`.
     public var description: String {
         let num = String(rawValue, radix: 16)
-        let str = repeatElement("0", count: 16 - num.characters.count).joined(separator: "")
+        let str = repeatElement("0", count: 16 - num.count).joined(separator: "")
         return "Bitboard(0x\(str + num))"
     }
 
