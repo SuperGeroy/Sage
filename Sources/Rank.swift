@@ -96,7 +96,7 @@ extension Rank {
     }
 
     /// Returns a rank from advancing `self` by `value` with respect to `color`.
-    public func advanced(by value: Int, for color: Color = ._white) -> Rank? {
+    public func advanced(by value: Int, for color: Color = .white) -> Rank? {
         return Rank(rawValue: rawValue + (color.isWhite ? value : -value))
     }
 

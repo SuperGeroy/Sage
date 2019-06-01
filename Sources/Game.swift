@@ -30,10 +30,10 @@ public final class Game {
         /// A draw.
         case draw
 
-        /// Draw regardless of Swift version.
+        /// Draw.
         internal static let _draw = Outcome.draw
 
-        /// Win regardless of Swift version.
+        /// Win.
         internal static func _win(_ color: Color) -> Outcome {
             return .win(color)
         }
@@ -48,7 +48,7 @@ public final class Game {
             if let color = winColor {
                 return color.isWhite ? "1-0" : "0-1"
             } else {
-                return "1/2-1/2"
+                return "½-½"
             }
         }
 
@@ -73,11 +73,13 @@ public final class Game {
             let stripped = string.split(separator: " ").map(String.init).joined(separator: "")
             switch stripped {
             case "1-0":
-                self = ._win(._white)
+                self = ._win(.white)
             case "0-1":
-                self = ._win(._black)
+                self = ._win(.black)
             case "1/2-1/2":
                 self = ._draw
+            case "½-½":
+                self = .draw
             default:
                 return nil
             }
@@ -118,7 +120,7 @@ public final class Game {
 
         /// Create a position.
         public init(board: Board = Board(),
-                    playerTurn: PlayerTurn = ._white,
+                    playerTurn: PlayerTurn = .white,
                     castlingRights: CastlingRights = .all,
                     enPassantTarget: Square? = nil,
                     halfmoves: UInt = 0,
@@ -133,8 +135,8 @@ public final class Game {
 
         /// Create a position from a valid FEN string.
         ///
-        /// - seealso: [FEN (Wikipedia)](https://en.wikipedia.org/wiki/Forsyth%E2%80%93Edwards_Notation),
-        ///            [FEN (Chess Programming Wiki)](https://chessprogramming.wikispaces.com/Forsyth-Edwards+Notation)
+        /// - see also: [FEN (Wikipedia)](https://en.wikipedia.org/wiki/Forsyth%E2%80%93Edwards_Notation ),
+        ///            [FEN (Chess Programming Wiki)](https://chessprogramming.org/Forsyth-Edwards_Notation)
         public init?(fen: String) {
             let parts = fen.split(separator: " ").map(String.init)
             guard
@@ -208,13 +210,12 @@ public final class Game {
 
         /// Returns the FEN string for the position.
         ///
-        /// - seealso: [FEN (Wikipedia)](https://en.wikipedia.org/wiki/Forsyth%E2%80%93Edwards_Notation),
-        ///            [FEN (Chess Programming Wiki)](https://chessprogramming.wikispaces.com/Forsyth-Edwards+Notation)
+        /// - see also: [FEN (Wikipedia)](https://en.wikipedia.org/wiki/Forsyth%E2%80%93Edwards_Notation ),
+        ///            [FEN (Chess Programming Wiki)](https://chessprogramming.org/Forsyth-Edwards_Notation)
         public func fen() -> String {
-            let transform = { "\($0 as Square)".lowercased() }
             return board.fen()
                 + " \(playerTurn.isWhite ? "w" : "b") \(castlingRights) "
-                + (enPassantTarget.map(transform) ?? "-")
+                + (enPassantTarget.map({ "\($0 as Square)".lowercased() }) ?? "-")
                 + " \(halfmoves) \(fullmoves)"
         }
 
@@ -308,7 +309,7 @@ public final class Game {
     public let variant: Variant
 
     /// Attackers to the current player's king.
-    private private(set) var attackersToKing: Bitboard
+    private var attackersToKing: Bitboard
 
     /// The current player's king is in check.
     public var kingIsChecked: Bool {
@@ -325,7 +326,7 @@ public final class Game {
         return _moveHistory.map({ $0.move })
     }
 
-    /// The amount of moves executed.
+    /// The amount of plies (half moves) executed.
     public var moveCount: Int {
         return _moveHistory.count
     }
@@ -333,7 +334,9 @@ public final class Game {
     /// The current fullmove number.
     public private(set) var fullmoves: UInt
 
-    /// The current halfmove clock.
+    /// The current halfmove clock (used for 50-moves draw rule).
+    ///
+    /// Counts no-pawn moves with no capture.
     public private(set) var halfmoves: UInt
 
     /// The target move location for an en passant.
@@ -394,11 +397,11 @@ public final class Game {
     /// - parameter variant: The game's chess variant. Default is standard.
     public init(whitePlayer: Player = Player(),
                 blackPlayer: Player = Player(),
-                variant: Variant = ._standard) {
+                variant: Variant = .standard) {
         self._moveHistory = []
         self._undoHistory = []
         self.board = Board(variant: variant)
-        self.playerTurn = ._white
+        self.playerTurn = .white
         self.castlingRights = .all
         self.whitePlayer = whitePlayer
         self.blackPlayer = blackPlayer
@@ -419,7 +422,7 @@ public final class Game {
     public init(position: Position,
                 whitePlayer: Player = Player(),
                 blackPlayer: Player = Player(),
-                variant: Variant = ._standard) throws {
+                variant: Variant = .standard) throws {
         if let error = position._validationError() {
             throw error
         }
@@ -448,7 +451,7 @@ public final class Game {
     public convenience init(moves: [Move],
                             whitePlayer: Player = Player(),
                             blackPlayer: Player = Player(),
-                            variant: Variant = ._standard) throws {
+                            variant: Variant = .standard) throws {
         self.init(whitePlayer: whitePlayer, blackPlayer: blackPlayer, variant: variant)
         for move in moves {
             try execute(move: move)
@@ -464,7 +467,7 @@ public final class Game {
 
     /// Returns the captured pieces for a color, or for all if color is `nil`.
     public func capturedPieces(for color: Color? = nil) -> [Piece] {
-        let pieces = _moveHistory.flatMap({ $0.capture })
+        let pieces = _moveHistory.compactMap({ $0.capture })
         if let color = color {
             return pieces.filter({ $0.color == color })
         } else {

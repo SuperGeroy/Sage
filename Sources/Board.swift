@@ -63,7 +63,7 @@ public struct Board: Hashable, CustomStringConvertible {
 
         /// The space's color.
         public var color: Color {
-            return (file.index & 1 != rank.index & 1) ? ._white : ._black
+            return (file.index & 1 != rank.index & 1) ? .white : .black
         }
 
         /// The space's name.
@@ -205,7 +205,7 @@ public struct Board: Hashable, CustomStringConvertible {
 
     /// The board's pieces.
     public var pieces: [Piece] {
-        return self.flatMap({ $0.piece })
+        return self.compactMap({ $0.piece })
     }
 
     /// The board's white pieces.
@@ -271,7 +271,7 @@ public struct Board: Hashable, CustomStringConvertible {
     /// Create a chess board.
     ///
     /// - parameter variant: The variant to populate the board for. Won't populate if `nil`. Default is `Standard`.
-    public init(variant: Variant? = ._standard) {
+    public init(variant: Variant? = .standard) {
         _bitboards = Array(repeating: 0, count: 12)
         if let variant = variant {
             for piece in Piece.all {
@@ -289,8 +289,8 @@ public struct Board: Hashable, CustomStringConvertible {
     ///
     /// - Warning: Only to be used with the board part of a full FEN string.
     ///
-    /// - seealso: [FEN (Wikipedia)](https://en.wikipedia.org/wiki/Forsyth%E2%80%93Edwards_Notation),
-    ///            [FEN (Chess Programming Wiki)](https://chessprogramming.wikispaces.com/Forsyth-Edwards+Notation)
+    /// - see also: [FEN (Wikipedia)](https://en.wikipedia.org/wiki/Forsyth%E2%80%93Edwards_Notation),
+    ///            [FEN (Chess Programming Wiki)](https://chessprogramming.org/Forsyth-Edwards+Notation)
     public init?(fen: String) {
         func pieces(for string: String) -> [Piece?]? {
             var pieces: [Piece?] = []
@@ -422,8 +422,8 @@ public struct Board: Hashable, CustomStringConvertible {
         self = Board(variant: nil)
     }
 
-    /// Populates `self` with with all of the pieces at their proper locations for the given chess variant.
-    public mutating func populate(for variant: Variant = ._standard) {
+    /// Populates `self` with all of the pieces at their proper locations for the given chess variant.
+    public mutating func populate(for variant: Variant = .standard) {
         self = Board(variant: variant)
     }
 
@@ -598,8 +598,8 @@ public struct Board: Hashable, CustomStringConvertible {
 
     /// Returns the FEN string for the board.
     ///
-    /// - seealso: [FEN (Wikipedia)](https://en.wikipedia.org/wiki/Forsyth%E2%80%93Edwards_Notation),
-    ///            [FEN (Chess Programming Wiki)](https://chessprogramming.wikispaces.com/Forsyth-Edwards+Notation)
+    /// - see also: [FEN (Wikipedia)](https://en.wikipedia.org/wiki/Forsyth%E2%80%93Edwards_Notation),
+    ///            [FEN (Chess Programming Wiki)](https://www.chessprogramming.org/Forsyth-Edwards_Notation)
     public func fen() -> String {
         func fen(forRank rank: Rank) -> String {
             var fen = ""
@@ -658,7 +658,7 @@ extension Board: CustomPlaygroundDisplayConvertible {
         return view
     }
 
-    /// A custom playgroundDescription for this instance.
+    /// A custom playground description for this instance.
     public var playgroundDescription: Any {
         return _playgroundDescription
     }

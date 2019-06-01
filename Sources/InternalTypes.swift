@@ -40,10 +40,10 @@ extension RawRepresentable where RawValue == Int, Self: Comparable {
 
     internal func _to(_ other: Self) -> [Self] {
         if other > self {
-            return (rawValue...other.rawValue).flatMap(Self.init(rawValue:))
+            return (rawValue...other.rawValue).compactMap(Self.init(rawValue:))
         } else if other < self {
             let values = (other.rawValue...rawValue).reversed()
-            return values.flatMap(Self.init(rawValue:))
+            return values.compactMap(Self.init(rawValue:))
         } else {
             return [self]
         }
@@ -51,10 +51,10 @@ extension RawRepresentable where RawValue == Int, Self: Comparable {
 
     internal func _between(_ other: Self) -> [Self] {
         if other > self {
-            return (rawValue + 1 ..< other.rawValue).flatMap(Self.init(rawValue:))
+            return (rawValue + 1 ..< other.rawValue).compactMap(Self.init(rawValue:))
         } else if other < self {
             let values = (other.rawValue + 1 ..< rawValue).reversed()
-            return values.flatMap(Self.init(rawValue:))
+            return values.compactMap(Self.init(rawValue:))
         } else {
             return []
         }

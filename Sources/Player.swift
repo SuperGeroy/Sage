@@ -30,20 +30,14 @@ public struct Player: Equatable, CustomStringConvertible {
         /// Computer player kind.
         case computer = "Computer"
 
-        /// Human regardless of Swift version.
-        internal static let _human = Kind.human
-
-        /// Computer regardless of Swift version.
-        internal static let _computer = Kind.computer
-
         /// Boolean indicating `self` is a human.
         public var isHuman: Bool {
-            return self == ._human
+            return self == .human
         }
 
         /// Boolean indicating `self` is a computer.
         public var isComputer: Bool {
-            return self == ._computer
+            return self == .computer
         }
 
         /// A textual representation of this instance.
@@ -53,7 +47,7 @@ public struct Player: Equatable, CustomStringConvertible {
 
     }
 
-    /// The the player's kind.
+    /// The player's kind.
     public var kind: Kind
 
     /// The player's name.
@@ -72,7 +66,7 @@ public struct Player: Equatable, CustomStringConvertible {
     /// - parameter kind: The player's kind. Default is human.
     /// - parameter name: The player's name. Default is `nil`.
     /// - parameter elo: The player's elo rating. Default is `nil`.
-    public init(kind: Kind = ._human, name: String? = nil, elo: UInt? = nil) {
+    public init(kind: Kind = .human, name: String? = nil, elo: UInt? = nil) {
         self.kind = kind
         self.name = name
         self.elo = elo

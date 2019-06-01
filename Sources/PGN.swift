@@ -338,7 +338,7 @@ private extension String {
         }
         let startIndex = index(after: self.startIndex)
         let endIndex = index(before: self.endIndex)
-        let tokens = self[startIndex ..< endIndex]._split(by: ["\""])
+        let tokens = String(self[startIndex ..< endIndex])._split(by: ["\""])
         guard tokens.count == 2 else {
             throw PGN.ParseError.tagPairTokenCount(tokens)
         }

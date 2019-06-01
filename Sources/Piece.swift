@@ -147,7 +147,7 @@ public struct Piece: Hashable, CustomStringConvertible {
 
     /// An array of all pieces.
     public static let all: [Piece] = {
-        return [._white, ._black].reduce([]) { pieces, color in
+        return [.white, .black].reduce([]) { pieces, color in
             return pieces + Kind.all.map({ Piece(kind: $0, color: color) })
         }
     }()
@@ -196,7 +196,7 @@ public struct Piece: Hashable, CustomStringConvertible {
         guard let kind = Kind(rawValue: value >> 1) else {
             return nil
         }
-        self.init(kind: kind, color: value & 1 == 0 ? ._white : ._black)
+        self.init(kind: kind, color: value & 1 == 0 ? .white : .black)
     }
 
     /// Create a piece from `kind` and `color`.
@@ -238,18 +238,18 @@ public struct Piece: Hashable, CustomStringConvertible {
     /// Create a piece from a character.
     public init?(character: Character) {
         switch character {
-            case "P": self.init(pawn: ._white)
-            case "p": self.init(pawn: ._black)
-            case "N": self.init(knight: ._white)
-            case "n": self.init(knight: ._black)
-            case "B": self.init(bishop: ._white)
-            case "b": self.init(bishop: ._black)
-            case "R": self.init(rook: ._white)
-            case "r": self.init(rook: ._black)
-            case "Q": self.init(queen: ._white)
-            case "q": self.init(queen: ._black)
-            case "K": self.init(king: ._white)
-            case "k": self.init(king: ._black)
+            case "P": self.init(pawn: .white)
+            case "p": self.init(pawn: .black)
+            case "N": self.init(knight: .white)
+            case "n": self.init(knight: .black)
+            case "B": self.init(bishop: .white)
+            case "b": self.init(bishop: .black)
+            case "R": self.init(rook: .white)
+            case "r": self.init(rook: .black)
+            case "Q": self.init(queen: .white)
+            case "q": self.init(queen: .black)
+            case "K": self.init(king: .white)
+            case "k": self.init(king: .black)
             default:
                 return nil
         }
@@ -266,7 +266,7 @@ public struct Piece: Hashable, CustomStringConvertible {
     }
 
     /// The special character for the piece.
-    public func specialCharacter(background color: Color = ._white) -> Character {
+    public func specialCharacter(background color: Color = .white) -> Character {
         switch kind {
             case .pawn:   return color == self.color ? "♙" : "♟"
             case .knight: return color == self.color ? "♘" : "♞"

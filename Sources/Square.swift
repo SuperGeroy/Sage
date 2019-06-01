@@ -223,7 +223,7 @@ public enum Square: Int, CustomStringConvertible {
 extension Square {
 
     /// An array of all squares.
-    public static let all: [Square] = (0 ..< 64).flatMap(Square.init(rawValue:))
+    public static let all: [Square] = (0 ..< 64).compactMap(Square.init(rawValue:))
 
     /// The file of `self`.
     public var file: File {

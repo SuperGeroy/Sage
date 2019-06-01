@@ -71,10 +71,10 @@ private let _notFileGH: Bitboard = 0x3f3f3f3f3f3f3f3f
 /// Due to their compact nature, bitboards can store information such as positions in memory very efficiently. Bitboards
 /// can also be used to answer questions about the state of a `Board` quickly with very few operations.
 ///
-/// Bitboards used internally within `Board` to store positions for all twelve cases of `Piece`.
+/// Bitboards are used internally within `Board` to store positions for all twelve cases of `Piece`.
 ///
-/// - seealso: [Bitboard (Wikipedia)](https://en.wikipedia.org/wiki/Bitboard),
-///            [Bitboards (Chess Programming Wiki)](https://chessprogramming.wikispaces.com/Bitboards)
+/// - see also: [Bitboard (Wikipedia)](https://en.wikipedia.org/wiki/Bitboard ),
+///            [Bitboards (Chess Programming Wiki)](https://chessprogramming.org/Bitboards)
 public struct Bitboard: RawRepresentable, Hashable, CustomStringConvertible {
 
     /// A bitboard shift direction.
@@ -559,7 +559,7 @@ public struct Bitboard: RawRepresentable, Hashable, CustomStringConvertible {
 
 }
 
-extension Bitboard: Sequence, BitwiseOperations {
+extension Bitboard: Sequence {
 
     /// A value less than or equal to the number of elements in
     /// the sequence, calculated nondestructively.
@@ -584,9 +584,8 @@ extension Bitboard: Sequence, BitwiseOperations {
 
 }
 
-extension Bitboard: ExpressibleByIntegerLiteral { }
-
-extension Bitboard {
+extension Bitboard: ExpressibleByIntegerLiteral {
+    
     /// Create an instance initialized to `value`.
     public init(integerLiteral value: UInt64) {
         rawValue = value
@@ -605,6 +604,11 @@ public func & (lhs: Bitboard, rhs: Bitboard) -> Bitboard {
 /// - complexity: O(1).
 public func | (lhs: Bitboard, rhs: Bitboard) -> Bitboard {
     return Bitboard(rawValue: lhs.rawValue | rhs.rawValue)
+}
+
+/// Stores the result of performing a bitwise OR operation on the two given values in the left-hand-side variable.
+public func |= (lhs: inout Bitboard, rhs: Bitboard) {
+    lhs.rawValue |= rhs.rawValue
 }
 
 /// Returns the bits that are set in exactly one of `lhs` and `rhs`.
