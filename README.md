@@ -3,7 +3,7 @@
 [![Sage](https://github.com/SuperGeroy/Sage/blob/assets/Banner.png)](https://github.com/SuperGeroy/Sage)
 
 <p align="center">
-<a href="https://developer.apple.com/swift/"><img alt="Swift 3 | 4.2" src="https://img.shields.io/badge/Swift-3%20%7C%204.2-orange.svg"></a>
+<a href="https://developer.apple.com/swift/"><img alt="Swift 4.2" src="https://img.shields.io/badge/Swift-4.2-orange.svg"></a>
 <img alt="Platforms" src="https://img.shields.io/badge/platform-ios%20%7C%20macos%20%7C%20watchos%20%7C%20tvos%20%7C%20linux-lightgrey.svg">
 <a href="https://www.apache.org/licenses/LICENSE-2.0"><img alt="Apache 2.0 License" src="https://img.shields.io/badge/license-Apache%202.0-000000.svg"></a>
 </p>
@@ -71,8 +71,8 @@ Development happens in the [`develop`](https://github.com/SuperGeroy/Sage/tree/d
     - watchOS 2.0+
     - tvOS 9.0+
     - Linux
-- Xcode 10.1
-- Swift 3 (full 4.2 compatibility coming soon)
+- Xcode 10.2.1
+- Swift 4.2 (Swift 5 compatibility coming soon)
 
 ### Install Using Swift Package Manager
 The [Swift Package Manager](https://swift.org/package-manager/) is a
