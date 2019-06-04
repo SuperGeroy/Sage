@@ -1,5 +1,3 @@
----
-
 [![Sage](https://github.com/SuperGeroy/Sage/blob/assets/Banner.png)](https://github.com/SuperGeroy/Sage)
 
 <p align="center">
@@ -42,6 +40,7 @@ Development happens in the [`develop`](https://github.com/SuperGeroy/Sage/tree/d
         - [Board Quick Look](#board-quick-look)
 - [Donation](#donation)
 - [License](#license)
+---
 
 ## Build Status
 
