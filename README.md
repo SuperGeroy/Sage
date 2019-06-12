@@ -17,7 +17,6 @@ Sage is a cross-platform chess library for Swift.
 
 Development happens in the [`develop`](https://github.com/SuperGeroy/Sage/tree/develop) branch.
 
-- [Build Status](#build-status)
 - [Features](#features)
 - [Installation](#installation)
     - [Compatibility](#compatibility)
@@ -41,13 +40,6 @@ Development happens in the [`develop`](https://github.com/SuperGeroy/Sage/tree/d
 - [Donation](#donation)
 - [License](#license)
 ---
-
-## Build Status
-
-| Branch    | Status |
-| :-------: | :----: |
-| `master`  | <a href="https://travis-ci.org/nvzqz/Sage"><img alt="Build Status" src="https://travis-ci.org/nvzqz/Sage.svg?branch=master"></a>  |
-| `develop` | <a href="https://travis-ci.org/nvzqz/Sage"><img alt="Build Status" src="https://travis-ci.org/nvzqz/Sage.svg?branch=develop"></a> |
 
 ## Features
 
