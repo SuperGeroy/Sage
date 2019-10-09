@@ -7,8 +7,6 @@
 </p>
 
 <p align="center">
-<a href="https://cocoapods.org/pods/Sage"><img alt="CocoaPods" src="https://img.shields.io/cocoapods/v/Sage.svg"></a>
-<a href="https://github.com/Carthage/Carthage"><img alt="Carthage" src="https://img.shields.io/badge/Carthage-compatible-4BC51D.svg?style=flat"></a>
 <a href="https://swift.org/package-manager/"><img alt="Swift Package Manager" src="https://img.shields.io/badge/SPM-compatible-orange.svg"></a>
 <a href="https://nvzqz.github.io/Sage/docs/"><img alt="Documented" src="https://img.shields.io/badge/documented-%E2%9C%93-brightgreen.svg"></a>
 </p>
@@ -21,8 +19,6 @@ Development happens in the [`develop`](https://github.com/SuperGeroy/Sage/tree/d
 - [Installation](#installation)
     - [Compatibility](#compatibility)
     - [Swift Package Manager](#install-using-swift-package-manager)
-    - [CocoaPods](#install-using-cocoapods)
-    - [Carthage](#install-using-carthage)
     - [Manually](#install-manually)
 - [Usage](#usage)
     - [Game Management](#game-management)
@@ -84,52 +80,6 @@ decentralized dependency manager for Swift.
     ```
 
 2. Import the Sage module.
-
-    ```swift
-    import Sage
-    ```
-
-### Install Using CocoaPods
-[CocoaPods](https://cocoapods.org/) is a centralized dependency manager for
-Objective-C and Swift. Go [here](https://guides.cocoapods.org/using/index.html)
-to learn more.
-
-1. Add the project to your [Podfile](https://guides.cocoapods.org/using/the-podfile.html).
-
-    ```ruby
-    use_frameworks!
-
-    pod 'Sage', '~> 3.0'
-    ```
-
-    If you want to be on the bleeding edge, replace the last line with:
-
-    ```ruby
-    pod 'Sage', :git => 'https://github.com/SuperGeroy/Sage.git'
-    ```
-
-2. Run `pod install` and open the `.xcworkspace` file to launch Xcode.
-
-3. Import the Sage framework.
-
-    ```swift
-    import Sage
-    ```
-
-### Install Using Carthage
-[Carthage](https://github.com/Carthage/Carthage) is a decentralized dependency
-manager for Objective-C and Swift.
-
-1. Add the project to your [Cartfile](https://github.com/Carthage/Carthage/blob/master/Documentation/Artifacts.md#cartfile).
-
-    ```
-    github "nvzqz/Sage"
-    ```
-
-2. Run `carthage update` and follow [the additional steps](https://github.com/Carthage/Carthage#getting-started)
-   in order to add Sage to your project.
-
-3. Import the Sage framework.
 
     ```swift
     import Sage
